@@ -17,8 +17,6 @@ namespace RentalPeAPI.Monitoring.Interfaces.REST.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/v1/monitoring/iot-devices")]
-[Route("api/v1/monitoring/iotdevices")]
-[Route("api/v1/monitoring/[controller]")]
 [Authorize] 
 public class IoTDevicesController : ControllerBase
 {

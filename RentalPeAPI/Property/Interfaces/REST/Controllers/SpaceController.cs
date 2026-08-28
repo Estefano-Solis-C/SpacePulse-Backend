@@ -12,7 +12,6 @@ namespace RentalPeAPI.Property.Interfaces.Rest.Controllers
     [ApiController]
     [Route("api/v1/space")]
     [Route("api/v1/spaces")]
-    [Route("api/v1/[controller]")]
     [Authorize] 
     public class SpaceController : ControllerBase
     {

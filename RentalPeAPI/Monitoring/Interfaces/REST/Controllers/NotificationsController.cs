@@ -21,7 +21,6 @@ namespace RentalPeAPI.Monitoring.Interfaces.REST.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/v1/monitoring/notifications")]
-[Route("api/v1/monitoring/[controller]")]
 [Tags("Notifications")]
 [Authorize] 
 public class NotificationsController : ControllerBase

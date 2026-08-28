@@ -23,7 +23,6 @@ namespace RentalPeAPI.Monitoring.Interfaces.REST.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/v1/monitoring/readings")]
-[Route("api/v1/monitoring/[controller]")]
 [Tags("Readings")]
 [Authorize] 
 public class ReadingsController : ControllerBase
