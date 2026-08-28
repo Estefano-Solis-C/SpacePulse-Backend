@@ -1,6 +1,6 @@
-# Multi-Stage Dockerfile for SpacePulse .NET 8 Web API
+# Multi-Stage Dockerfile for SpacePulse .NET 9 Web API
 # Stage 1: Build & Publish
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 COPY RentalPeAPI/RentalPeAPI.csproj RentalPeAPI/
 RUN dotnet restore "RentalPeAPI/RentalPeAPI.csproj"
@@ -10,12 +10,10 @@ RUN dotnet build "RentalPeAPI.csproj" -c Release -o /app/build
 RUN dotnet publish "RentalPeAPI.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 # Stage 2: Production Runtime
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 WORKDIR /app
 EXPOSE 5000
 ENV ASPNETCORE_URLS=http://+:5000
 ENV ASPNETCORE_ENVIRONMENT=Production
 COPY --from=build /app/publish .
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD curl -f http://localhost:5000/api/v1/monitoring/readings/user || exit 1
 ENTRYPOINT ["dotnet", "RentalPeAPI.dll"]

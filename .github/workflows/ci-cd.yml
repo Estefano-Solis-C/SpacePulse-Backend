@@ -1,4 +1,4 @@
-name: Backend CI/CD Pipeline (.NET 8 Web API)
+name: Backend CI/CD Pipeline (.NET 9 Web API)
 
 on:
   push:
@@ -8,17 +8,17 @@ on:
 
 jobs:
   build-and-verify:
-    name: "Build & Verify .NET 8 Web API"
+    name: "Build & Verify .NET 9 Web API"
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup .NET 8 SDK
+      - name: Setup .NET 9 SDK
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
 
       - name: Restore Dependencies
         run: dotnet restore RentalPeAPI/RentalPeAPI.csproj
