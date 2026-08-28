@@ -124,7 +124,7 @@ void AddMySqlDbContext(IServiceCollection services, IConfiguration configuration
     services.AddDbContext<AppDbContext>(options =>
     {
         // Usamos la sobrecarga que permite pasar opciones de MySQL
-        options.UseMySql(cs, ServerVersion.AutoDetect(cs), mySqlOptions =>
+        options.UseMySql(cs, new MySqlServerVersion(new Version(8, 0, 36)), mySqlOptions =>
         {
             // Opcional: Esto ayuda a que la aplicación no se caiga por fallas temporales
             mySqlOptions.EnableRetryOnFailure(
@@ -180,11 +180,24 @@ builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 
 var app = builder.Build();
 
-// Apply Database Migrations
+// Apply Database Migrations with retry for Docker startup
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.EnsureCreated();
+    for (int retry = 0; retry < 10; retry++)
+    {
+        try
+        {
+            db.Database.EnsureCreated();
+            Console.WriteLine("[SpacePulse API] Database connected and schema verified successfully.");
+            break;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[SpacePulse API] Waiting for Database initialization... attempt {retry + 1}/10 ({ex.Message})");
+            System.Threading.Thread.Sleep(3000);
+        }
+    }
 }
 
 // Swagger solo en Development
