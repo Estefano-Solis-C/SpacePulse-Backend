@@ -348,13 +348,9 @@ using (var scope = app.Services.CreateScope())
                 var device = new RentalPeAPI.Monitoring.Domain.Model.Aggregates.IoTDevice(
                     spaceId: demoSpace.Id,
                     createdByUserId: owner.Id,
-                    type: "Thermostat",
+                    type: "TEMPERATURE",
                     name: "Smart Climate Sensor",
-                    serialNumber: "SN-IOT-001",
-                    metricName: "Temperature",
-                    unit: "°C",
-                    minThreshold: 18.0m,
-                    maxThreshold: 26.0m
+                    serialNumber: "SN-IOT-001"
                 );
                 dbContext.IoTDevices.Add(device);
                 dbContext.SaveChanges();
