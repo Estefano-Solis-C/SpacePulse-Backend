@@ -16,6 +16,8 @@ namespace RentalPeAPI.Monitoring.Interfaces.REST.Controllers;
 /// de telemetría, control de encendido/apagado y validaciones de seguridad por usuario creador.
 /// </summary>
 [ApiController]
+[Route("api/v1/monitoring/iot-devices")]
+[Route("api/v1/monitoring/iotdevices")]
 [Route("api/v1/monitoring/[controller]")]
 [Authorize] 
 public class IoTDevicesController : ControllerBase

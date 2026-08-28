@@ -321,7 +321,47 @@ using (var scope = app.Services.CreateScope())
         }
 
         dbContext.SaveChanges();
-        Console.WriteLine("[SpacePulse API] Demo users (owner@spacepulse.com, builder@spacepulse.com) seeded successfully.");
+
+        if (!dbContext.Spaces.Any())
+        {
+            var owner = dbContext.Users.FirstOrDefault(u => u.Email == "owner@spacepulse.com");
+            if (owner != null)
+            {
+                var demoSpace = new RentalPeAPI.Property.Domain.Aggregates.Space(
+                    homeownerId: owner.Id,
+                    title: "Miraflores Modern Smart Office",
+                    description: "Smart office space equipped with environmental IoT sensors and digital access.",
+                    location: "Av. Larco 400, Miraflores, Lima",
+                    spaceType: RentalPeAPI.Property.Domain.Aggregates.Enums.SpaceType.Office,
+                    dimensionsSquareMeters: 75.0m,
+                    estimatedBudget: 1500.0m,
+                    currency: "PEN",
+                    hasIot: true,
+                    images: new List<string> {
+                        "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800",
+                        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800"
+                    }
+                );
+                dbContext.Spaces.Add(demoSpace);
+                dbContext.SaveChanges();
+
+                var device = new RentalPeAPI.Monitoring.Domain.Model.Aggregates.IoTDevice(
+                    spaceId: demoSpace.Id,
+                    createdByUserId: owner.Id,
+                    type: "Thermostat",
+                    name: "Smart Climate Sensor",
+                    serialNumber: "SN-IOT-001",
+                    metricName: "Temperature",
+                    unit: "°C",
+                    minThreshold: 18.0m,
+                    maxThreshold: 26.0m
+                );
+                dbContext.IoTDevices.Add(device);
+                dbContext.SaveChanges();
+            }
+        }
+
+        Console.WriteLine("[SpacePulse API] Demo users, space, and IoT devices seeded successfully.");
     }
     catch (Exception ex)
     {

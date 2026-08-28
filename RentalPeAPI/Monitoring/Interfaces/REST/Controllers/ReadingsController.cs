@@ -1,4 +1,4 @@
-﻿// Monitoring/Interfaces/REST/Controllers/ReadingsController.cs
+// Monitoring/Interfaces/REST/Controllers/ReadingsController.cs
 using System;
 using System.Linq;
 using System.Reflection;
@@ -22,6 +22,7 @@ namespace RentalPeAPI.Monitoring.Interfaces.REST.Controllers;
 /// PASO 5C: Despacha notificaciones automáticamente ante anomalías telemétricas.
 /// </summary>
 [ApiController]
+[Route("api/v1/monitoring/readings")]
 [Route("api/v1/monitoring/[controller]")]
 [Tags("Readings")]
 [Authorize] 
@@ -201,8 +202,8 @@ public class ReadingsController : ControllerBase
         {
             // Recuperar dispositivos del espacio
             var devices = await _deviceRepository.ListBySpaceIdAsync(spaceId);
-            if (!devices.Any())
-                return NotFound(new { error = $"No se encontraron dispositivos para el espacio {spaceId}." });
+            if (devices == null || !devices.Any())
+                return Ok(new List<IoTDeviceDetailExtendedResource>());
 
             // Invocar simulación de telemetría para cada dispositivo
             foreach (var device in devices)
@@ -265,8 +266,8 @@ public class ReadingsController : ControllerBase
         {
             // Recuperar dispositivos del usuario
             var devices = await _deviceRepository.ListByCreatedByUserIdAsync(userId);
-            if (!devices.Any())
-                return NotFound(new { error = "No se encontraron dispositivos para el usuario autenticado." });
+            if (devices == null || !devices.Any())
+                return Ok(new List<IoTDeviceDetailExtendedResource>());
 
             // Invocar simulación de telemetría para cada dispositivo
             foreach (var device in devices)

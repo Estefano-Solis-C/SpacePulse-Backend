@@ -1,4 +1,4 @@
-﻿namespace RentalPeAPI.Property.Interfaces.Rest.Resources
+namespace RentalPeAPI.Property.Interfaces.Rest.Resources
 {
     public class SpaceResource
     {
@@ -7,10 +7,14 @@
         public string Description { get; set; } = "";
         public string Location { get; set; } = "";
         public Guid HomeownerId { get; set; }
+        public Guid OwnerId => HomeownerId;
         public Guid? RemodelerId { get; set; }
         public string SpaceType { get; set; } = "";
+        public string Type => SpaceType;
         public decimal DimensionsSquareMeters { get; set; }
         public decimal EstimatedBudget { get; set; }
+        public decimal PricePerMonth => EstimatedBudget;
+        public decimal TotalPricing => EndingPricing > 0 ? EndingPricing : EstimatedBudget;
         public decimal EndingPricing { get; set; } = 0m;
         public string Currency { get; set; } = "PEN";
         public bool HasIot { get; set; }

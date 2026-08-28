@@ -20,6 +20,7 @@ namespace RentalPeAPI.Monitoring.Interfaces.REST.Controllers;
 /// de forma 100% automática y reactiva ante hitos del negocio.
 /// </summary>
 [ApiController]
+[Route("api/v1/monitoring/notifications")]
 [Route("api/v1/monitoring/[controller]")]
 [Tags("Notifications")]
 [Authorize] 
