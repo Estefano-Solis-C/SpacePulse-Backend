@@ -178,6 +178,18 @@ builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 // Kestrel: solo HTTP para evitar warning de certificado y mixed content
 //builder.WebHost.ConfigureKestrel(o => o.ListenLocalhost(52888));
 
+
+// Enable CORS for all local and cloud origins
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 
 // Apply Database Migrations with retry for Docker startup
@@ -228,6 +240,7 @@ app.MapGet("/", context =>
 // app.UseHttpsRedirection(); // deshabilitado: solo HTTP
 
 // ==== AUTENTICACIÓN Y AUTORIZACIÓN ====
+app.UseCors("AllowAll");
 app.UseAuthentication();  // DEBE ir antes de UseAuthorization
 app.UseAuthorization();
 
