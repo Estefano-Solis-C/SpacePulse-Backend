@@ -1,0 +1,18 @@
+# Prometheus Metrics Scraper Configuration
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - "alert_rules.yml"
+
+scrape_configs:
+  - job_name: 'spacepulse-backend'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['spacepulse-backend:5000']
+
+  - job_name: 'spacepulse-frontend'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['spacepulse-frontend:80']

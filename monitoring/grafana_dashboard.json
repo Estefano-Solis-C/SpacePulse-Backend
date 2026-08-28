@@ -1,0 +1,32 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 1,
+  "title": "SpacePulse (RentalPe) - DevOps Observability Dashboard",
+  "panels": [
+    {
+      "type": "stat",
+      "title": "API Request Throughput",
+      "gridPos": { "h": 6, "w": 6, "x": 0, "y": 0 }
+    },
+    {
+      "type": "gauge",
+      "title": "HTTP 5xx Error Rate",
+      "gridPos": { "h": 6, "w": 6, "x": 6, "y": 0 }
+    },
+    {
+      "type": "timeseries",
+      "title": "Latency Percentiles (p50, p95, p99)",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 6 }
+    },
+    {
+      "type": "timeseries",
+      "title": "Active IoT Device Telemetry Streams",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 6 }
+    }
+  ],
+  "schemaVersion": 38,
+  "version": 1
+}

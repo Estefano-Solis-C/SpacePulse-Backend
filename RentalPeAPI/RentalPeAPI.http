@@ -1,0 +1,6 @@
+@RentalPeAPI_HostAddress = http://localhost:5270
+
+GET {{RentalPeAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+

@@ -1,0 +1,54 @@
+# ==========================================
+# SpacePulse Backend .gitignore (.NET 8 CQRS)
+# ==========================================
+
+# Build results
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio & VS Code files
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# User-specific files
+*.rsuser
+*.suo
+*.userprefs
+
+# Publish output
+[Pp]ublish/
+publish/
+
+# Test results & Coverage
+TestResults/
+*.trx
+coverage/
+*.coverage
+*.coveragexml
+
+# Database / SQLite / LocalDB
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# Environment & Secrets
+appsettings.Development.json
+appsettings.Local.json
+.env
+.env.local
+
+# OS generated
+.DS_Store
+Thumbs.db
+[Dd]esktop.ini
