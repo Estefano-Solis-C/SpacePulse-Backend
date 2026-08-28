@@ -282,4 +282,51 @@ app.MapGet("/metrics", () =>
     return Results.Text(sb.ToString(), "text/plain; version=0.0.4");
 });
 
+
+// Automatic Database Seeder for Demo Accounts
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var dbContext = services.GetRequiredService<RentalPeAPI.Shared.Infrastructure.Persistence.EFC.Configuration.AppDbContext>();
+        var hasher = services.GetRequiredService<RentalPeAPI.User.Domain.Services.IPasswordHashingService>();
+
+        if (!dbContext.Users.Any(u => u.Email == "owner@spacepulse.com"))
+        {
+            var owner = new RentalPeAPI.User.Domain.User(
+                Guid.NewGuid(),
+                "Carlos Perez (Homeowner)",
+                "owner@spacepulse.com",
+                hasher.HashPassword("Password123!"),
+                "+51 999 888 777",
+                "Homeowner",
+                "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150"
+            );
+            dbContext.Users.Add(owner);
+        }
+
+        if (!dbContext.Users.Any(u => u.Email == "builder@spacepulse.com"))
+        {
+            var builderUser = new RentalPeAPI.User.Domain.User(
+                Guid.NewGuid(),
+                "Constructora ProTech (Remodeler)",
+                "builder@spacepulse.com",
+                hasher.HashPassword("Password123!"),
+                "+51 988 777 666",
+                "Remodeler",
+                "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150"
+            );
+            dbContext.Users.Add(builderUser);
+        }
+
+        dbContext.SaveChanges();
+        Console.WriteLine("[SpacePulse API] Demo users (owner@spacepulse.com, builder@spacepulse.com) seeded successfully.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"[SpacePulse API Seeder] Notice: {ex.Message}");
+    }
+}
+
 app.Run();

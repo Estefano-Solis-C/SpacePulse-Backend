@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using MediatR; 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,24 +19,31 @@ public class UsersController : ControllerBase
         _mediator = mediator;
     }
 
-    /// <summary>
+        /// <summary>
     /// POST: Registra un nuevo usuario (Homeowner o Remodeler).
     /// Endpoint público - No requiere autenticación.
     /// </summary>
     [HttpPost("register")]
     [AllowAnonymous] 
-    public async Task<ActionResult<UserDto>> RegisterUser([FromBody] RegisterUserResource resource)
+    public async Task<IActionResult> RegisterUser([FromBody] RegisterUserResource resource)
     {
-        var command = new RegisterUserCommand(
-            resource.FullName,
-            resource.Email,
-            resource.Password,
-            resource.Phone,
-            resource.Role,
-            resource.Photo
-        );
-        var userDto = await _mediator.Send(command);
-        return CreatedAtAction(nameof(GetUserById), new { userId = userDto.Id }, userDto);
+        try
+        {
+            var command = new RegisterUserCommand(
+                resource.FullName,
+                resource.Email,
+                resource.Password,
+                resource.Phone ?? string.Empty,
+                string.IsNullOrWhiteSpace(resource.Role) ? "Homeowner" : resource.Role,
+                resource.Photo
+            );
+            var userDto = await _mediator.Send(command);
+            return Ok(userDto);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
     /// <summary>
