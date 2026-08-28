@@ -11,8 +11,10 @@ namespace RentalPeAPI.Property.Interfaces.Rest.Transform;
 /// </summary>
 public static class SpaceCommandAssembler
 {
-    public static CreateSpaceCommand ToCommand(CreateSpaceResource resource)
+    public static CreateSpaceCommand ToCommand(CreateSpaceResource resource, Guid? overrideHomeownerId = null)
     {
+        Guid homeownerId = overrideHomeownerId ?? resource.HomeownerId ?? Guid.Empty;
+
         string locationStr = "Lima, Peru";
         if (resource.Location is System.Text.Json.JsonElement locElem)
         {
@@ -36,7 +38,7 @@ public static class SpaceCommandAssembler
         decimal dimensions = resource.DimensionsSquareMeters ?? 65.0m;
 
         return new CreateSpaceCommand(
-            homeownerId: resource.HomeownerId ?? Guid.Empty,
+            homeownerId: homeownerId,
             title: resource.Title,
             description: string.IsNullOrWhiteSpace(resource.Description) ? "Modern space" : resource.Description,
             location: locationStr,

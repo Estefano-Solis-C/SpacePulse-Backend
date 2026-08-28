@@ -94,9 +94,7 @@ namespace RentalPeAPI.Property.Interfaces.Rest.Controllers
 
             try
             {
-                var command = SpaceCommandAssembler.ToCommand(resource);
-                command = command with { HomeownerId = homeownerId };
-
+                var command = SpaceCommandAssembler.ToCommand(resource, homeownerId);
                 var space = await _spaceAppService.CreateSpaceAsync(command);
                 var resultResource = SpaceResourceAssembler.ToResource(space);
                 return Ok(resultResource);
