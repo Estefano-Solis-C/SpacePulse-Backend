@@ -1,4 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RentalPeAPI.Property.Domain.Aggregates;
 using RentalPeAPI.Property.Domain.Aggregates.Enums;
@@ -10,7 +14,6 @@ public class SpaceConfiguration : IEntityTypeConfiguration<Space>
     public void Configure(EntityTypeBuilder<Space> builder)
     {
         builder.ToTable("spaces");
-
 
         builder.HasKey(s => s.Id);
         builder.Property(s => s.Id)
@@ -68,12 +71,19 @@ public class SpaceConfiguration : IEntityTypeConfiguration<Space>
         builder.Property(s => s.HasIot)
             .IsRequired()
             .HasDefaultValue(false);
+
+        var listComparer = new ValueComparer<List<string>>(
+            (c1, c2) => c1 != null && c2 != null && c1.SequenceEqual(c2),
+            c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+            c => c.ToList()
+        );
+
         builder.Property(s => s.Images)
             .HasConversion(
-                v => System.Text.Json.JsonSerializer.Serialize(v, (System.Text.Json.JsonSerializerOptions)null),
-                v => System.Text.Json.JsonSerializer.Deserialize<List<string>>(v, (System.Text.Json.JsonSerializerOptions)null) ?? new List<string>()
+                v => System.Text.Json.JsonSerializer.Serialize(v, (System.Text.Json.JsonSerializerOptions?)null),
+                v => System.Text.Json.JsonSerializer.Deserialize<List<string>>(v, (System.Text.Json.JsonSerializerOptions?)null) ?? new List<string>()
             )
-            .IsRequired();
+            .Metadata.SetValueComparer(listComparer);
 
         builder.Property(s => s.PublishedAt)
             .IsRequired();

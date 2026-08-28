@@ -13,6 +13,7 @@ RUN dotnet publish "RentalPeAPI.csproj" -c Release -o /app/publish /p:UseAppHost
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 WORKDIR /app
 EXPOSE 5000
+ENV ASPNETCORE_HTTP_PORTS=5000
 ENV ASPNETCORE_URLS=http://+:5000
 ENV ASPNETCORE_ENVIRONMENT=Production
 COPY --from=build /app/publish .

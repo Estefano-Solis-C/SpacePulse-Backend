@@ -1,4 +1,4 @@
-﻿namespace RentalPeAPI.User.Domain;
+namespace RentalPeAPI.User.Domain;
 
 public class User
 {
@@ -14,7 +14,12 @@ public class User
 
     public List<PaymentMethod> PaymentMethods { get; private set; } = new();
 
-    private User() { }
+    private User()
+    {
+        FullName = string.Empty;
+        Email = string.Empty;
+        PasswordHash = string.Empty;
+    }
 
     public User(Guid id, string fullName, string email, string passwordHash,
         string? phone = null, string role = "customer", string? photo = null)

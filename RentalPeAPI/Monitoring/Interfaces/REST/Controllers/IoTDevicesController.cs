@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -265,7 +265,7 @@ public class IoTDevicesController : ControllerBase
         {
             return NotFound(new { error = $"Dispositivo con ID {id} no encontrado." });
         }
-        catch (UnauthorizedAccessException ex)
+        catch (UnauthorizedAccessException)
         {
             return Forbid();
         }
