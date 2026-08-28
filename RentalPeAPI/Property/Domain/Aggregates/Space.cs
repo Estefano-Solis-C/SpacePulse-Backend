@@ -1,4 +1,4 @@
-﻿using RentalPeAPI.Property.Domain.Aggregates.Enums;
+using RentalPeAPI.Property.Domain.Aggregates.Enums;
 
 namespace RentalPeAPI.Property.Domain.Aggregates;
 
@@ -140,8 +140,6 @@ public class Space
     {
         if (requestingUserId == Guid.Empty)
             throw new ArgumentException("El ID del usuario solicitante no puede estar vacío.", nameof(requestingUserId));
-        if (requestingUserId != HomeownerId)
-            throw new InvalidOperationException("Solo el propietario del espacio puede completar el proyecto.");
         if (Status != SpaceStatus.Accepted)
             throw new InvalidOperationException("Solo se pueden completar espacios en estado Accepted.");
         
@@ -151,18 +149,16 @@ public class Space
     /// <summary>
     /// Cancela el espacio por el Homeowner.
     /// Se puede cancelar desde estados Published o Accepted, incluso si ya hay un Remodelador asignado.
-    /// El requestingUserId debe ser el propietario del espacio.
     /// </summary>
     public void CancelProject(Guid requestingUserId)
     {
         if (requestingUserId == Guid.Empty)
             throw new ArgumentException("El ID del usuario solicitante no puede estar vacío.", nameof(requestingUserId));
-        if (requestingUserId != HomeownerId)
-            throw new InvalidOperationException("Solo el propietario del espacio puede cancelar el proyecto.");
         if (Status == SpaceStatus.Finished || Status == SpaceStatus.Cancelled)
             throw new InvalidOperationException("No se puede cancelar un espacio que ya ha sido completado o cancelado previamente.");
         
         Status = SpaceStatus.Cancelled;
+        RemodelerId = null;
     }
 
     /// <summary>
